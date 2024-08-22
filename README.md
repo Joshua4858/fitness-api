@@ -33,11 +33,15 @@ Ensure you have the following software installed:
    git clone https://github.com/your-username/fitness-api.git
    cd fitness-api
 
-   run mysql server
+   make sure to have mysql server running.
 
-   run npm install
+   install npm packages using : npm install
 
-   run php artisan migrate
+   run database migrations using: php artisan migrate
+
+   serve the application using : php artisan serve
+
+   test endpoints using curl, thunderclient, postman etc
 
 ### API 
 
