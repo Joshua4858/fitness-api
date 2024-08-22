@@ -7,7 +7,6 @@ Welcome to the Fitness API repository! This project is a simple API designed for
 - [Getting Started](#getting-started)
 - [Prerequisites](#prerequisites)
 - [Setup Instructions](#setup-instructions)
-- [Database Configuration](#database-configuration)
 - [API](#API)
 
 
