@@ -36,13 +36,11 @@ Ensure you have the following software installed:
 
 ### Running the Application
 
-2. **To Begin**
-3. 
 Once the setup is complete, you can access the API endpoints as follows:
 
-GET /api/workouts - Retrieve a list of all workouts
-POST /api/workouts - Create a new workout
-GET /api/workouts/{id} - Retrieve a specific workout by ID
-PUT /api/workouts/{id} - Update a specific workout by ID
-DELETE /api/workouts/{id} - Delete a specific workout by ID
-The API will respond with JSON data.
+- **GET**:  /api/workouts - Retrieve a list of all workouts
+- **POST**: /api/workouts - Create a new workout
+- **GET** /api/workouts/{id} - Retrieve a specific workout by ID
+- **PUT** /api/workouts/{id} - Update a specific workout by ID
+- **DELETE** /api/workouts/{id} - Delete a specific workout by ID
+- The API will respond with JSON data.
