@@ -33,6 +33,12 @@ Ensure you have the following software installed:
    git clone https://github.com/your-username/fitness-api.git
    cd fitness-api
 
+   run mysql server
+
+   run npm install
+
+   run php artisan migrate
+
 ### API 
 
 Once the setup is complete, you can access the API endpoints as follows:
