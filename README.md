@@ -19,7 +19,7 @@ To get started with the Fitness API, follow the steps below to set up and run th
 Ensure you have the following software installed:
 
 - **PHP**: Version 8.0 or higher
-- **Composer**: PHP dependency manager
+- **Composer**: PHP dependency manager with Laravel 11
 - **MySQL**: Version 5.7 or higher
 - **Node.js and npm** (Optional): For managing frontend dependencies if applicable
 
