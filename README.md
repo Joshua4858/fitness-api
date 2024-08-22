@@ -1,5 +1,5 @@
-## About fitness-api
+## About Fitness API
 
-Simple Laravel fitness api
+Simple Laravel Fitness Api
 
 
