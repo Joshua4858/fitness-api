@@ -8,7 +8,7 @@ Welcome to the Fitness API repository! This project is a simple API designed for
 - [Prerequisites](#prerequisites)
 - [Setup Instructions](#setup-instructions)
 - [Database Configuration](#database-configuration)
-- [Running the Application](#running-the-application)
+- [API](#API)
 
 
 ## Getting Started
@@ -34,7 +34,7 @@ Ensure you have the following software installed:
    git clone https://github.com/your-username/fitness-api.git
    cd fitness-api
 
-### Running the Application
+### API 
 
 Once the setup is complete, you can access the API endpoints as follows:
 
