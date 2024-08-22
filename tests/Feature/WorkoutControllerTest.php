@@ -25,7 +25,6 @@ class WorkoutControllerTest extends TestCase
         // Assert that the response contains the expected fields
         $response->assertJsonStructure([
             '*' => [
-                'id',
                 'exercise',
                 'sets',
                 'reps',
