@@ -9,11 +9,7 @@ Welcome to the Fitness API repository! This project is a simple API designed for
 - [Setup Instructions](#setup-instructions)
 - [Database Configuration](#database-configuration)
 - [Running the Application](#running-the-application)
-- [Using the API](#using-the-api)
-- [Running Tests](#running-tests)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
+
 
 ## Getting Started
 
@@ -37,3 +33,16 @@ Ensure you have the following software installed:
    ```bash
    git clone https://github.com/your-username/fitness-api.git
    cd fitness-api
+
+### Running the Application
+
+2. **To Begin**
+3. 
+Once the setup is complete, you can access the API endpoints as follows:
+
+GET /api/workouts - Retrieve a list of all workouts
+POST /api/workouts - Create a new workout
+GET /api/workouts/{id} - Retrieve a specific workout by ID
+PUT /api/workouts/{id} - Update a specific workout by ID
+DELETE /api/workouts/{id} - Delete a specific workout by ID
+The API will respond with JSON data.
