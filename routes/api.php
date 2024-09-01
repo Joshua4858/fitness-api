@@ -10,3 +10,9 @@ Route::prefix('workouts')->group(function () {
     Route::put('/{workout}', [WorkoutController::class, 'update'])->name('workouts.update');
     Route::delete('/{workout}', [WorkoutController::class, 'destroy'])->name('workouts.destroy');
 });
+
+// Public routes
+Route::controller(RegisterController::class)->group(function() {
+    Route::post('register','register');
+    Route::post('login','login');
+});
