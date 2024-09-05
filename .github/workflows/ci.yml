@@ -25,13 +25,20 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-          extensions: mbstring, dom, pdo, pdo_mysql, xml
+          extensions: mbstring, dom, pdo, pdo_mysql, xml, sqlite
           ini-values: post_max_size=256M, max_execution_time=300
           coverage: none
 
       # Step 3: Install Composer dependencies
       - name: Install Composer Dependencies
         run: composer install --prefer-dist --no-progress --no-suggest --optimize-autoloader --no-interaction
+
+      - name: Set up .env for Testing
+        run: |
+          cp .env.example .env
+          echo "DB_CONNECTION=sqlite" >> .env
+          echo "DB_DATABASE=:memory:" >> .env
+          php artisan key:generate
 
           
       # Step 5: Run migrations for the test database
