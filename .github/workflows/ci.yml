@@ -34,14 +34,12 @@ jobs:
       - name: Setup .env for Testing
         run: |
           cp .env.example .env
-          echo "DB_CONNECTION=sqlite" >> .env
-          echo "DB_DATABASE=:memory:" >> .env
           php artisan key:generate
 
           
       # Step 5: Run migrations for the test database
       - name: Run Migrations
-        run: php artisan migrate
+        run: php artisan migrate --force
 
       # Step 6: Run PHPUnit tests
       - name: Run Tests
