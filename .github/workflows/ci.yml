@@ -12,9 +12,6 @@ on:
 jobs:
   laravel-tests:
     runs-on: ubuntu-latest
-    env:
-        DB_CONNECTION: sqlite
-        DB_DATABASE: ':memory:'
     steps:
       # Step 1: Checkout the code from the repo
       - name: Checkout Code
@@ -37,9 +34,11 @@ jobs:
         run: |
           cp .env.example .env
           echo "DB_CONNECTION=sqlite" >> .env
-          echo "DB_DATABASE=:memory:" >> .env
+          echo "DB_DATABASE=/tmp/database.sqlite" >> .env
           php artisan key:generate
 
+      - name: Create SQLite Database File
+        run: touch /tmp/database.sqlite
           
       # Step 5: Run migrations for the test database
       - name: Run Migrations
