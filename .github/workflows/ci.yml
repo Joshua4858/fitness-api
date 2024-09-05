@@ -10,7 +10,6 @@ on:
       - main
 
 jobs:
-  # Job for running tests
   laravel-tests:
     runs-on: ubuntu-latest
 
