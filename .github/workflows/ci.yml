@@ -34,10 +34,10 @@ jobs:
         uses: actions/checkout@v3
 
       # Step 2: Setup PHP with required extensions
-      - name: Setup PHP
+      - name: Setup PHP 8.2
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'
+          php-version: '8.2'
           extensions: mbstring, dom, pdo, pdo_mysql, xml
           ini-values: post_max_size=256M, max_execution_time=300
           coverage: none
