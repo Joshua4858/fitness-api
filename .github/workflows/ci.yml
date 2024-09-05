@@ -12,6 +12,9 @@ on:
 jobs:
   laravel-tests:
     runs-on: ubuntu-latest
+    env:
+        DB_CONNECTION: sqlite
+        DB_DATABASE: :memory:
     steps:
       # Step 1: Checkout the code from the repo
       - name: Checkout Code
@@ -30,16 +33,14 @@ jobs:
       - name: Install Composer Dependencies
         run: composer install --prefer-dist --no-progress --no-suggest --optimize-autoloader --no-interaction
 
-      # Step 4: Set environment variables for testing
-      - name: Setup .env for Testing
-        run: |
-          cp .env.example .env
-          php artisan key:generate
-
           
       # Step 5: Run migrations for the test database
       - name: Run Migrations
         run: php artisan migrate --force
+
+      - name: List Tables
+        run: php artisan tinker --execute="DB::select('PRAGMA table_info(workouts)')"
+
 
       # Step 6: Run PHPUnit tests
       - name: Run Tests
