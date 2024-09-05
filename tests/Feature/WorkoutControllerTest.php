@@ -14,7 +14,7 @@ class WorkoutControllerTest extends TestCase
     public function it_can_list_all_workouts()
     {
         // Create test data
-        $workouts = Workout::factory()->count(3)->create();
+        $workouts = Workout::factory()->count(2)->create();
 
         // Make a GET request to the API endpoint
         $response = $this->getJson('/api/workouts');
@@ -33,4 +33,57 @@ class WorkoutControllerTest extends TestCase
         ]);
     }
 
+    /** @test */
+    public function it_can_store_workout() 
+    {
+        $workout = Workout::factory()->make()->toArray();
+
+        // Post request to endpoint
+        $response = $this->postJson('/api/workouts/',$workout);
+
+        $response->assertStatus(201);
+
+        $this->assertDatabaseHas('workouts',$workout);
+    }
+
+    /** @test */
+    public function it_can_update_workout() 
+    {
+        $workout = Workout::factory()->create();
+
+        $updateData = [
+            'exercise' => "Updated Exercise Name",
+            'sets' => 4,
+            'reps' => 10,
+            'weight' => 100
+        ];
+        
+        // Update that workout in the database
+        $response = $this->putJson('/api/workouts/'.$workout->id,$updateData);
+
+        $response->assertStatus(200);
+
+        $this->assertDatabaseHas('workouts', [
+            'id' => $workout->id,
+            'exercise' => 'Updated Exercise Name',
+            'sets' => 4,
+            'reps' => 10,
+            'weight' => 100
+        ]);
+    }
+
+    /** @test */
+    public function it_can_delete_workout() 
+    {
+        $workout = Workout::factory()->create();
+
+        // Delete after creating
+        $response = $this->deleteJson('/api/workouts/'.$workout->id);
+
+        // Asserting that the response status is 204 (No Content);
+        $response->assertStatus(204);
+
+        $this->assertDatabaseMissing('workouts',['id'=> $workout->id]);
+
+    }
 }
