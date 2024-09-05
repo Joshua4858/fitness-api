@@ -1,0 +1,98 @@
+name: Laravel CI/CD Pipeline
+
+# This workflow runs on push and pull requests to the main branch
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  # Job for running tests
+  laravel-tests:
+    runs-on: ubuntu-latest
+
+    services:
+      # Setup MySQL service for testing
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: testing
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      # Step 1: Checkout the code from the repo
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Setup PHP with required extensions
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mbstring, dom, pdo, pdo_mysql, xml
+          ini-values: post_max_size=256M, max_execution_time=300
+          coverage: none
+
+      # Step 3: Install Composer dependencies
+      - name: Install Composer Dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest --optimize-autoloader --no-interaction
+
+      # Step 4: Set environment variables for testing
+      - name: Setup .env for Testing
+        run: |
+          cp .env.example .env
+          echo "DB_CONNECTION=sqlite" >> .env
+          echo "DB_DATABASE=:memory:" >> .env
+          php artisan key:generate
+
+          
+      # Step 5: Run migrations for the test database
+      - name: Run Migrations
+        run: php artisan migrate --env=testing --force
+
+      # Step 6: Run PHPUnit tests
+      - name: Run Tests
+        run: vendor/bin/phpunit --testdox
+
+  # Job for deployment (runs only if tests pass)
+#   deploy:
+#     runs-on: ubuntu-latest
+#     needs: laravel-tests  # Ensure tests pass before deployment
+
+#     steps:
+#       # Step 1: Checkout the code from the repo
+#       - name: Checkout Code
+#         uses: actions/checkout@v3
+
+#       # Step 2: Deploy to Production via SSH
+#       - name: Deploy to Production
+#         uses: appleboy/ssh-action@v0.1.1
+#         with:
+#           host: ${{ secrets.SSH_HOST }}
+#           username: ${{ secrets.SSH_USER }}
+#           key: ${{ secrets.SSH_PRIVATE_KEY }}
+#           script: |
+#             cd /path/to/your/app
+#             git pull origin main
+#             composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+#             php artisan migrate --force
+#             php artisan config:clear
+#             php artisan cache:clear
+#             php artisan route:clear
+#             php artisan view:clear
+#             php artisan optimize
+
+#       # Optionally, you can restart services like the web server
+#       - name: Restart Nginx (Optional)
+#         run: sudo systemctl restart nginx
+#         if: success()  # Only restart if the deployment is successful
