@@ -17,8 +17,7 @@ class WorkoutController extends Controller
      */
     public function index() 
     {
-        $workouts = Workout::all();
-        return response()->json($workouts);
+        return response()->json(Workout::all());
     }
 
     /**

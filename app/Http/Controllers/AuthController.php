@@ -7,7 +7,7 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -27,26 +27,23 @@ class AuthController extends Controller
 
     public function login(Request $request) : JsonResponse
     {
-        // Authenticate using request email and password
-        // return 200 login else 401 Unauthorised.
         $credentials = $request->only('email', 'password');
 
         // Check credentials in database
+
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
 
-            // Check if email is verified
-            if (!user->hasVerifedEmail()) {
-                return $this->errorResponse('Please verify you email address.', 403);
-            }
+            // // Check if email is verified
+            // if (!$user->hasVerifiedEmail()) {
+            //     return $this->errorResponse('Please verify you email address.', 403);
+            // }
 
-            $token = $user->createToken('fitness-api')->planTextToken;
+            $token = $user->createToken('fitness-api')->plainTextToken;
 
-            return $this->successResponse([
-                'user' => $user,
-                'token' => $token,
+            $data = ["user" => $user, "token" => $token];
 
-            ], 'Successfully logged in.', 200);
+            return $this->successResponse($data, 'Successfully logged in.', 200);
         }
 
         return $this->errorResponse('Invalid credentials', 401);
@@ -60,4 +57,8 @@ class AuthController extends Controller
 
         return $this->successResponse(null, "Successfully logged out.");
     }
+
+    // TODO: Reset Password functionality
+
+    // TODO: Refresh Token functionality
 }

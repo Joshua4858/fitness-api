@@ -4,7 +4,8 @@ use App\Http\Controllers\WorkoutController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('workouts')->group(function () {
+
+Route::prefix('workouts')->middleware('auth:sanctum')->group(function () {
     Route::get('/', [WorkoutController::class, 'index'])->name('workouts.index');
     Route::post('/', [WorkoutController::class, 'store'])->name('workouts.store');
     Route::get('/{id}', [WorkoutController::class, 'show'])->name('workouts.show');
@@ -13,8 +14,9 @@ Route::prefix('workouts')->group(function () {
 });
 
 
-Route::post('/register',[AuthController::class, 'register'])->name('auth.register');
-Route::post('/login',[AuthController::class,'login'])->name('auth.login');
+Route::post('/register',[AuthController::class, 'register'])->name('register');
+Route::post('/login',[AuthController::class,'login'])->name('login');
+Route::delete('/logout',[AuthController::class,'logout'])->name('logout')->middleware('auth:sanctum');
 
 
 // Public routes
