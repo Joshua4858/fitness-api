@@ -8,12 +8,14 @@ use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+
 
 class AuthController extends Controller
 {
     public function register(UserRequest $request): JsonResponse
     {
-
         $validatedData = $request->validated();
 
         $user = User::create([
@@ -22,6 +24,8 @@ class AuthController extends Controller
             'password' => Hash::make($validatedData['password'])
         ]);
 
+        event(new Registered($user));
+    
         return $this->successResponse($user, 'Successfully registered user!', 201);
     }
 
@@ -34,10 +38,10 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
 
-            // // Check if email is verified
-            // if (!$user->hasVerifiedEmail()) {
-            //     return $this->errorResponse('Please verify you email address.', 403);
-            // }
+            // Check if email is verified
+            if (!$user->hasVerifiedEmail()) {
+                return $this->errorResponse('Please verify you email address.', 403);
+            }
 
             $token = $user->createToken('fitness-api')->plainTextToken;
 
@@ -51,8 +55,6 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        // Logs user out by revoking the token
-        // Or invalidating the session if this is session-based authentication
         $request->user()->currentAccessToken()->delete();
 
         return $this->successResponse(null, "Successfully logged out.");
@@ -61,4 +63,40 @@ class AuthController extends Controller
     // TODO: Reset Password functionality
 
     // TODO: Refresh Token functionality
+
+    public function verifyEmail(Request $request, $id, $hash)
+    {
+        // Find the user by ID from the URL
+        $user = User::findOrFail($id);
+    
+        // Check if the hash matches the hashed email
+        if (!hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
+            return $this->errorResponse('Invalid verification link.', 403);
+        }
+    
+        // Check if the user has already verified their email
+        if ($user->hasVerifiedEmail()) {
+            return $this->errorResponse('Email already verified.', 400);
+        }
+    
+        // Mark the email as verified
+        $user->markEmailAsVerified();
+    
+        // Generate token after email verification
+        $token = $user->createToken('fitness-api')->plainTextToken;
+    
+        return $this->successResponse(['user' => $user, 'token' => $token], 'Email successfully verified.');
+    }
+    
+
+    public function resendEmail(Request $request) : JsonResponse {
+        // Check if user hasVerifedEmail
+        if($request->user()->hasVerifiedEmail()){
+            return $this->errorResponse('Email already verified', 400);
+        }
+
+        $request->user()->sendEmailVerificationNotification();
+
+        return $this->successResponse(null,"Verification link sent",200);
+    }
 }
