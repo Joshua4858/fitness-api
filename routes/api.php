@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\WorkoutController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EmailVerificationController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -16,16 +17,13 @@ Route::prefix('workouts')->middleware(['auth:sanctum','verified'])->group(functi
 
 Route::post('/register',[AuthController::class, 'register'])->name('register');
 Route::post('/login',[AuthController::class,'login'])->name('login');
+Route::delete('/logout',[AuthController::class,'logout'])->name('logout')->middleware('auth:sanctum');
 
 // IMPORTANT! - due to defining this manually as Headless API ensure to use correct route names as VerifyEmail uses particular names like 'verification.verify'
-Route::get('/email/verify/{id}/{hash}',[AuthController::class,'verifyEmail'])->middleware('signed')->name('verification.verify');
-Route::post('/email/resend', [AuthController::class,'resendEmail'])->name('resendEmail');
-
-Route::middleware('auth:sanctum')->group(function () {
-    Route::delete('/logout',[AuthController::class,'logout'])->name('logout');
+Route::get('/email/verify/{id}/{hash}',[EmailVerificationController::class,'verifyEmail'])->middleware('signed')->name('verification.verify');
+Route::post('/email/resend', [EmailVerificationController::class,'resendEmail'])->name('resendEmail');
 
 
-});
 
 // Routes to implement proper email verification with Sanctum
 // 1.) Route to display a notice to the user that they should click the email verification link in the verification email that Laravel sent to email
