@@ -11,7 +11,7 @@ use PHPUnit\Framework\Attributes\Test;
 
 class WorkoutControllerTest extends TestCase
 {
-    use RefreshDatabase; 
+    use RefreshDatabase; // Use database migrations for testing
 
     /**
      * Set up an authenticated user before each test.
