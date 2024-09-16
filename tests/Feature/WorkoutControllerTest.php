@@ -10,7 +10,7 @@ use Tests\TestCase;
 
 class WorkoutControllerTest extends TestCase
 {
-    use RefreshDatabase; // Use database migrations for testing
+    use RefreshDatabase; 
 
     /**
      * Set up an authenticated user before each test.
