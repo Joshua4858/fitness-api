@@ -6,10 +6,32 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\Workout;
+use App\Models\User;
 use PHPUnit\Framework\Attributes\Test;
 
 class WorkoutControllerTest extends TestCase
 {
+    use RefreshDatabase; // Use database migrations for testing
+
+    /**
+     * Set up an authenticated user before each test.
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Create and authenticate a user
+        $this->user = User::factory()->create([
+            'email_verified_at' => now(), // Simulate email verification
+        ]);
+
+        // Create a token for the user
+        $this->token = $this->user->createToken('fitness-api')->plainTextToken;
+
+        $this->withHeader('Authorization', 'Bearer ' . $this->token);
+        
+    }
+
     #[Test]
     public function it_can_list_all_workouts()
     {
@@ -85,4 +107,7 @@ class WorkoutControllerTest extends TestCase
 
         $this->assertDatabaseMissing('workouts', ['id' => $workout->id]);
     }
+
+
 }
+
