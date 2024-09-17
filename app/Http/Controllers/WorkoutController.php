@@ -63,7 +63,6 @@ class WorkoutController extends Controller
         // if(! Gate::allows('update-workout', $workout)) {
         //     return $this->errorResponse('Forbidden to do that!', 403);
         // }
-
         Gate::authorize('update-workout', $workout);
 
         $validatedData = $request->validated();
