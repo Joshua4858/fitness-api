@@ -13,6 +13,12 @@ class Workout extends Model
         'exercise',
         'sets',
         'reps',
-        'weight'
+        'weight',
+        'user_id'
     ];
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
+
 }

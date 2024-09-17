@@ -7,6 +7,11 @@ use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\URL;
 
+use App\Models\User;
+use App\Models\Workout;
+use Illuminate\Support\Facades\Gate;
+
+
 class AuthServiceProvider extends ServiceProvider
 {
     /**
@@ -22,6 +27,13 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+
+        Gate::define('update-workout', function(User $user, Workout $workout)
+        {
+            return $user->id === $workout->user_id;
+        });
+
+
         VerifyEmail::toMailUsing(function ($notifiable, $url) {
         // Generate the signed URL with expiration (default: 60 minutes)
         $verificationUrl = URL::temporarySignedRoute(

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\WorkoutRequest;
 use App\Models\Workout;
-
+use Illuminate\Support\Facades\Gate;
 /**
  * Handles workout-related operations.
  */
@@ -18,6 +18,7 @@ class WorkoutController extends Controller
     public function index() 
     {
         return response()->json(Workout::all());
+        
     }
 
     /**
@@ -28,8 +29,13 @@ class WorkoutController extends Controller
      */
     public function store(WorkoutRequest $request) 
     {
+        // Check request for validated data.
         $validatedData = $request->validated();
+        // Add user id to the workout data.
+        $validatedData['user_id'] = auth()->id();
+        // Create the workout
         $workout = Workout::create($validatedData);
+        // Return success response
         return response()->json($workout, 201);
     }
 
@@ -54,8 +60,16 @@ class WorkoutController extends Controller
      */
     public function update(WorkoutRequest $request, Workout $workout) 
     {
+        // if(! Gate::allows('update-workout', $workout)) {
+        //     return $this->errorResponse('Forbidden to do that!', 403);
+        // }
+
+        Gate::authorize('update-workout', $workout);
+
         $validatedData = $request->validated();
+
         $workout->update($validatedData);
+
         return response()->json($workout, 200);
     }
 
