@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
-
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -21,15 +19,15 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
-            'password' => Hash::make($validatedData['password'])
+            'password' => Hash::make($validatedData['password']),
         ]);
 
         event(new Registered($user));
-    
+
         return $this->successResponse($user, 'Successfully registered user!', 201);
     }
 
-    public function login(Request $request) : JsonResponse
+    public function login(Request $request): JsonResponse
     {
         $credentials = $request->only('email', 'password');
 
@@ -39,13 +37,13 @@ class AuthController extends Controller
             $user = Auth::user();
 
             // Check if email is verified
-            if (!$user->hasVerifiedEmail()) {
+            if (! $user->hasVerifiedEmail()) {
                 return $this->errorResponse('Please verify you email address.', 403);
             }
 
             $token = $user->createToken('fitness-api')->plainTextToken;
 
-            $data = ["user" => $user, "token" => $token];
+            $data = ['user' => $user, 'token' => $token];
 
             return $this->successResponse($data, 'Successfully logged in.', 200);
         }
@@ -57,12 +55,11 @@ class AuthController extends Controller
     {
         $request->user()->currentAccessToken()->delete();
 
-        return $this->successResponse(null, "Successfully logged out.");
+        return $this->successResponse(null, 'Successfully logged out.');
     }
 
     // TODO: Reset Password functionality
 
     // TODO: Refresh Token functionality
 
-   
 }

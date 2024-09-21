@@ -45,4 +45,21 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
         ];
     }
+
+    // a user is associated with many workouts
+    public function workouts()
+    {
+        return $this->hasMany(Workout::class);
+    }
+
+    // a user belongs to many roles many to many relationship
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+
+    }
+
+    public function hasRole($roleName): bool {
+        return $this->roles()->where('name', $roleName)->exists();
+    }
 }

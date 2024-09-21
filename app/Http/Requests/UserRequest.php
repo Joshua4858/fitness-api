@@ -24,10 +24,11 @@ class UserRequest extends FormRequest
         return [
             'email' => 'required|email|unique:users,email',
             'name' => 'required|string|max:255',
-            'password' => 'required|string|min:8|confirmed'
+            'password' => 'required|string|min:8|confirmed',
         ];
     }
-     /**
+
+    /**
      * Customize the validation messages.
      */
     public function messages(): array

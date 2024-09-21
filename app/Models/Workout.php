@@ -14,11 +14,13 @@ class Workout extends Model
         'sets',
         'reps',
         'weight',
-        'user_id'
+        'user_id',
     ];
 
-    public function user() {
+    // A workout instance has only one user associated with it.
+    // Each instance of a Workout model can belong to one instance of another model User
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
-
 }

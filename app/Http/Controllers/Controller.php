@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Routing\Controller as BaseController;
+
 use Illuminate\Http\JsonResponse;
+use Illuminate\Routing\Controller as BaseController;
 
 class Controller extends BaseController
 {
@@ -12,7 +13,6 @@ class Controller extends BaseController
      * @param  mixed  $data
      * @param  string  $message
      * @param  int  $statusCode
-     * @return JsonResponse
      */
     protected function successResponse($data = null, $message = 'Operation successful', $statusCode = 200): JsonResponse
     {
@@ -28,7 +28,6 @@ class Controller extends BaseController
      *
      * @param  string  $message
      * @param  int  $statusCode
-     * @return JsonResponse
      */
     protected function errorResponse($message = 'An error occurred', $statusCode = 400): JsonResponse
     {

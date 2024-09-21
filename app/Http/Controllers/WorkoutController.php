@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Http\Request;
+
 use App\Http\Requests\WorkoutRequest;
 use App\Models\Workout;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+
 /**
  * Handles workout-related operations.
  */
@@ -15,19 +17,18 @@ class WorkoutController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index() 
+    public function index()
     {
         return response()->json(Workout::all());
-        
+
     }
 
     /**
      * Store a newly created workout in the database.
      *
-     * @param  \App\Http\Requests\WorkoutRequest  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(WorkoutRequest $request) 
+    public function store(WorkoutRequest $request)
     {
         // Check request for validated data.
         $validatedData = $request->validated();
@@ -35,6 +36,7 @@ class WorkoutController extends Controller
         $validatedData['user_id'] = auth()->id();
         // Create the workout
         $workout = Workout::create($validatedData);
+
         // Return success response
         return response()->json($workout, 201);
     }
@@ -48,17 +50,16 @@ class WorkoutController extends Controller
     public function show($id)
     {
         $workout = Workout::findOrFail($id);
+
         return response()->json($workout);
     }
 
     /**
      * Update the specified workout in the database.
      *
-     * @param  \App\Http\Requests\WorkoutRequest  $request
-     * @param  \App\Models\Workout  $workout
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(WorkoutRequest $request, Workout $workout) 
+    public function update(WorkoutRequest $request, Workout $workout)
     {
         // if(! Gate::allows('update-workout', $workout)) {
         //     return $this->errorResponse('Forbidden to do that!', 403);
@@ -75,12 +76,12 @@ class WorkoutController extends Controller
     /**
      * Remove the specified workout from the database.
      *
-     * @param  \App\Models\Workout  $workout
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Workout $workout) 
+    public function destroy(Workout $workout)
     {
         $workout->delete();
+
         return response()->json(null, 204);
     }
 }

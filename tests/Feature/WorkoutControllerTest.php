@@ -2,12 +2,11 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use App\Models\Workout;
 use App\Models\User;
+use App\Models\Workout;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class WorkoutControllerTest extends TestCase
 {
@@ -28,8 +27,8 @@ class WorkoutControllerTest extends TestCase
         // Create a token for the user
         $this->token = $this->user->createToken('fitness-api')->plainTextToken;
 
-        $this->withHeader('Authorization', 'Bearer ' . $this->token);
-        
+        $this->withHeader('Authorization', 'Bearer '.$this->token);
+
     }
 
     #[Test]
@@ -56,7 +55,7 @@ class WorkoutControllerTest extends TestCase
     }
 
     #[Test]
-    public function it_can_store_workout() 
+    public function it_can_store_workout()
     {
         $workout = Workout::factory()->make()->toArray();
 
@@ -69,17 +68,17 @@ class WorkoutControllerTest extends TestCase
     }
 
     #[Test]
-    public function it_can_update_workout() 
+    public function it_can_update_workout()
     {
         $workout = Workout::factory()->create();
 
         $updateData = [
-            'exercise' => "Updated Exercise Name",
+            'exercise' => 'Updated Exercise Name',
             'sets' => 4,
             'reps' => 10,
-            'weight' => 100
+            'weight' => 100,
         ];
-        
+
         // Update that workout in the database
         $response = $this->putJson('/api/workouts/'.$workout->id, $updateData);
 
@@ -90,12 +89,12 @@ class WorkoutControllerTest extends TestCase
             'exercise' => 'Updated Exercise Name',
             'sets' => 4,
             'reps' => 10,
-            'weight' => 100
+            'weight' => 100,
         ]);
     }
 
     #[Test]
-    public function it_can_delete_workout() 
+    public function it_can_delete_workout()
     {
         $workout = Workout::factory()->create();
 
@@ -107,7 +106,4 @@ class WorkoutControllerTest extends TestCase
 
         $this->assertDatabaseMissing('workouts', ['id' => $workout->id]);
     }
-
-
 }
-
