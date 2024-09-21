@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -21,6 +22,10 @@ class AuthController extends Controller
             'email' => $validatedData['email'],
             'password' => Hash::make($validatedData['password']),
         ]);
+
+        // Attach the role of client to every new user
+        $clientRole = Role::where('name', 'client')->first();
+        $user->roles()->attach($clientRole->id); // Attach new role by its id
 
         event(new Registered($user));
 

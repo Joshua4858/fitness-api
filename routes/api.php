@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\WorkoutController;
 use Illuminate\Support\Facades\Route;
@@ -11,6 +12,12 @@ Route::prefix('workouts')->middleware(['auth:sanctum', 'verified'])->group(funct
     Route::get('/{id}', [WorkoutController::class, 'show'])->name('workouts.show');
     Route::put('/{workout}', [WorkoutController::class, 'update'])->name('workouts.update');
     Route::delete('/{workout}', [WorkoutController::class, 'destroy'])->name('workouts.destroy');
+});
+
+// Only admins can manage roles
+Route::prefix('roles')->middleware(['auth:sanctum', 'verified', 'can:manage-roles'])->group(function () {
+    Route::get('/',[RoleController::class,'index'])->name('roles.index');
+    Route::post('/',[RoleController::class,'store'])->name('roles.store');
 });
 
 Route::post('/register', [AuthController::class, 'register'])->name('register');

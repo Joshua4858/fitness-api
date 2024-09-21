@@ -30,6 +30,12 @@ class AuthServiceProvider extends ServiceProvider
             return $user->id === $workout->user_id;
         });
 
+        Gate::define('manage-roles', function (User $user) {
+            // dd($user->roles->pluck('name')); // This will output the roles of the current user
+
+            return $user->hasRole('admin');
+        });
+
         VerifyEmail::toMailUsing(function ($notifiable, $url) {
             // Generate the signed URL with expiration (default: 60 minutes)
             $verificationUrl = URL::temporarySignedRoute(

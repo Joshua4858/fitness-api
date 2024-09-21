@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\WorkoutRequest;
 use App\Models\Workout;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
 
 /**
@@ -17,8 +18,10 @@ class WorkoutController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index() : JsonResponse
     {
+        Gate::authorize('viewAll', Workout::all());
+
         return response()->json(Workout::all());
 
     }
@@ -28,7 +31,7 @@ class WorkoutController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(WorkoutRequest $request)
+    public function store(WorkoutRequest $request) : JsonResponse
     {
         // Check request for validated data.
         $validatedData = $request->validated();
@@ -47,7 +50,7 @@ class WorkoutController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show($id)
+    public function show($id) : JsonReponse
     {
         $workout = Workout::findOrFail($id);
 
