@@ -20,10 +20,7 @@ class WorkoutController extends Controller
      */
     public function index() : JsonResponse
     {
-        Gate::authorize('viewAll', Workout::all());
-
         return response()->json(Workout::all());
-
     }
 
     /**
@@ -67,7 +64,7 @@ class WorkoutController extends Controller
         // if(! Gate::allows('update-workout', $workout)) {
         //     return $this->errorResponse('Forbidden to do that!', 403);
         // }
-        Gate::authorize('update-workout', $workout);
+        //Gate::authorize('update-workout', $workout);
 
         $validatedData = $request->validated();
 

@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use App\Models\Role;
 use App\Models\Workout;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
@@ -23,6 +24,13 @@ class WorkoutControllerTest extends TestCase
         $this->user = User::factory()->create([
             'email_verified_at' => now(), // Simulate email verification
         ]);
+
+        $adminRole = Role::factory()->create(['name' => 'admin']);
+         
+        $this->user->roles()->attach($adminRole->id);
+
+        \Log::info('Checking user role', ['roles' => $this->user->roles->pluck('name')->toArray()]);
+
 
         // Create a token for the user
         $this->token = $this->user->createToken('fitness-api')->plainTextToken;
@@ -70,6 +78,7 @@ class WorkoutControllerTest extends TestCase
     #[Test]
     public function it_can_update_workout()
     {
+
         $workout = Workout::factory()->create();
 
         $updateData = [

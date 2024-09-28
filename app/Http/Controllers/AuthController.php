@@ -17,17 +17,7 @@ class AuthController extends Controller
     {
         $validatedData = $request->validated();
 
-        $user = User::create([
-            'name' => $validatedData['name'],
-            'email' => $validatedData['email'],
-            'password' => Hash::make($validatedData['password']),
-        ]);
-
-        // Attach the role of client to every new user
-        $clientRole = Role::where('name', 'client')->first();
-        $user->roles()->attach($clientRole->id); // Attach new role by its id
-
-        event(new Registered($user));
+        $user = $this->userService->registerUser($validatedData);
 
         return $this->successResponse($user, 'Successfully registered user!', 201);
     }
